@@ -5,6 +5,7 @@ from langchain.chains import VectorDBQAWithSourcesChain
 from langchain.prompts import PromptTemplate
 import pandas as pd
 import pickle 
+import faiss
 
 from utils import create_html, color_start, color_end
 from prompt import prompt_template
@@ -67,7 +68,7 @@ chain, prompt = load_chain(openai_api_key)
 
 for question, target in zip(df.Question, df.Answer):
     answer, docs, sources = get_answer(question, chain)
-    docs_string = '\n'.join([color_start + d.metadata['source'] + ':\n' + color_end + d.page_content for d in docs])
+    docs_string = '\n\n'.join([color_start + d.metadata['source'] + ':\n' + color_end + d.page_content for d in docs])
     docs_html = wandb.Html(create_html(docs_string))
     answer_html = wandb.Html(create_html(answer))
     prompt_html = wandb.Html(create_html(prompt.template))
