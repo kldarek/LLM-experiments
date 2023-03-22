@@ -1,0 +1,6 @@
+.ipynb_checkpoints/
+wandb/
+artifacts/
+__pycache__/
+.index
+.pickle

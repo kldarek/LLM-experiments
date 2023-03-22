@@ -1,0 +1,45 @@
+﻿Title,Column 1
+Question,Answer
+"Hi, sorry if that has been answered before, but I would like to read an artifact (csv) locally, without creating the local directory ""artifacts"". Does anyone know how to do this?",you can find how to do this here though: https://docs.wandb.ai/ref/python/public-api/artifact#file
+"Hello! I am new to w&b and have been using it for the last week or so. I am going through the course. It's great! I have a question about how w&b uses git. When I look in the dashboard at the Overview for a single run, there is a ""Git state"" item. I'm confused about how this works... When I do a wandb run, I never see anything about git commits. How is wandb working with git? I see, for example, the line below. What is the hash as it relates to the active repo? When I do a git log
+ I don't see anything related to this. But, it does indeed work when I run that command 
+ How does this all work??","Hey! Glad you're enjoying the course. W&B is checking the local git state from your machine automatically so that you can reproduce your runs if needed. Because a lot of ML code is ran but not committed, it tracks any uncommitted local changes too using git diff which you can apply using that above command."
+"Hi, I wanted to know how much is the limit for the image size to view in wandb table?","are you hitting any limits? I think for practical reasons adding too large images to a wandb.Table may not be a good idea (storage, transfer, loading times etc.) but I'm not aware of a limit"
+"Hello, the model I am using for a baseline interacts with the training data as a single pre-processed .mdb database. I see from the wandb documentation that I can track artifacts by reference, but it looks like that feature is intended for 3rd-party data storage. Would I be able to log a local file on my machine by reference by using the path in place of a url?","Filesystem References
+Another common pattern for fast access to datasets is to expose an NFS mount point to a remote filesystem on all machines running training jobs. This can be an even simpler solution than a cloud storage bucket because from the perspective of the training script, the files look just like they are sitting on your local filesystem. Luckily, that ease of use extends into using Artifacts to track references to file systems — mounted or otherwise."
+"Hello, question: I am uploading images to artifact by loading a table with an image column, as shown in lesson 1. 
+However, if I create the image values as wandb.Image(Image.open(path)), my 3GB image folder becomes >30Gb media/images folder in the artifact.
+If instead I use wandb.Image(path), the artifact's media/images folder is about 3GB, but each image is loaded into a subfolder, making difficult to retrieve the image when I download the artifact for training.
+
+How can I have the images loaded simply into media/images, with the latter not being enormously bigger than the original one?","I wouldn’t use Table as a way of storing images for later use, only for visualization and EDA. You can store all the image files in a regular Artifact (not a Table). "
+"Hello, can't we add two same aliases to different models in the Model Registry? 
+
+I have a project where I solve 2 problems: classification and segmentation.
+
+I would like to put aliases of 'classification' and 'segmentation' for all the models I put at the registry but as I put an update of a model, for example a second classification model, If I try to use the tag 'classification' again it removes that tag from the first model registered. A tag can only be assigned to one model 😦 Is that the expected behaviour? I would like to tag the with same tags, so I can filter properly","This seems like a good use case for “Tags” as opposed to “Aliases” in the model registry. "
+"I have a question for the wandb team @Darek Kłeczek , @Corey_S on something I'm struggling on since quite a bit of time now:
+It looks to me that if my train function receive config as parameter, as in the second part of the course (https://github.com/wandb/edu/blob/main/mlops-001/lesson2/train.py), I'm then obliged to run the sweeps from the CLI. But I would like to run the sweeps in a python script using the SDK (e.g. sweep_id = wandb.sweep(sweep=sweep_config) ; wandb.agent(sweep_id=sweep_id, function=train(config), count=10)) but the config passed to the train function creates a mess (broken pipes everywhere 😭 ). On your repos I can only find examples in which the train function has no arguments and the default_config which will be overrun by the sweeps is defined inside of it (e.g. https://colab.research.google.com/drive/1gKixa6hNUB8qrn1CfHirOfTEQm0qLCSS#scrollTo=aIhxl7glaJ5k) and in this case the sweep are launched with the SDK.
+Is what I'm saying correct or is there a way to run the sweeps from the SDK while having config passed to the train function ?
+Many thanks in advance for the clarification ! 
+(BTW I'm loving W&B ❤️ )","in wandb.agent(sweep_id=sweep_id, function=train(config), count=10)) you're actually calling the train function instead of passing it like function=train. If you want it to receive the config locally before it's set from W&B, you could hardcode it within the start of the train function or do something fancy like nesting the function or using pythons functools.partial (https://docs.python.org/3/library/functools.html#functools.partial) 
+train_with_config = functools.partial(train, config=config) and then pass function=train_with_config to wandb.agent"
+"I would like to know if is there a way to change the artifacts directory path via an API. 
+
+I am asking because I am using this notebook https://www.kaggle.com/code/ayuraj/sd-2-0-download-dataset-from-w-b-artifacts/notebook, where the author downloads artifacts (by the way, the author works in W&B too). Then, I rewrote this into a python script and want to run it on my local machine, but I figured out that there is no way to change the output path and I had to write bash commands to do what I expected. 
+
+#!/bin/bash 
+# download and move ""ayut_generated_open_prompts"" data
+mkdir -p data/ayut_generated_open_prompts
+python scripts/download_and_prepare_ayut_generated_open_prompts_data.py
+mv artifacts data/ayut_generated_open_prompts/
+mv ayut_generated_open_prompts.csv data/ayut_generated_open_prompts
+
+If you have way to do it via API, please let me know. Thank you!","not sure if I get the question correctly, but artifact.download() accepts a parameter root to control where the artifact is downloaded - does this help?"
+,
+,
+,
+,
+,
+,
+,
+,
