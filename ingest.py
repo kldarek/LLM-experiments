@@ -31,7 +31,6 @@ def load_documents(fname):
     return source_chunks
 
 
-
 def create_and_save_index(documents):
     store = FAISS.from_documents(documents,OpenAIEmbeddings())
     artifact = wandb.Artifact("faiss_store", type="search_index")
